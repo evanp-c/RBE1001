@@ -10,12 +10,9 @@
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
-// Controller1          controller                    
 // Right                motor         10              
 // Left                 motor         1               
 // Arm                  motor         8               
-// RangeFinderE         sonar         E, F            
-// BumperC              bumper        C               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 
 #include "vex.h"
@@ -25,22 +22,36 @@ using namespace std;
 
 using namespace vex;
 
-const double wheelDiameter = 10; // CM
+const double wheelDiameter = 10.4; // CM
 //const double GearRatio = 1/5;
-//const double WheelTrack = 31.5;
+const double wheelTrack = 30.4;
 double circumference = wheelDiameter * M_PI;
 
 void move(double distance) {
-  Right.spinFor(5*distance*360/circumference, fwd, degrees, false);
-  Left.spinFor(5*distance*360/circumference, fwd, degrees);
+  
+  Right.spinFor(fwd, 5*distance*360/circumference, degrees, 80, rpm, false);
+  Left.spinFor(fwd, 5*distance*360/circumference, degrees, 80, rpm);
 }
+
+void rotate(double angle) {
+  Right.spinFor(reverse, 5*4, degrees);
+  Right.spinFor(reverse, (5*wheelTrack*M_PI*360/circumference)/(360/angle), degrees, 30, rpm, false);
+  Left.spinFor(fwd, (5*wheelTrack*M_PI*360/circumference)/(360/angle), degrees, 30, rpm);
+ }
 
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   task::sleep(250);
-  move(20);
-  //rotate(90.0);
+  move(20.0);
+  rotate(90);
+  move(20.0);
+  rotate(90);
+  move(20.0);
+  rotate(90);
+  move(20.0);
+  rotate(90.0);
+  
 }
 
 
@@ -53,11 +64,7 @@ int main() {
   //Left.spinFor(fwd, 5*distance*360/circumference, degrees);
 
 
-// void rotate(double angle) {
-//   double circumference = wheelDiameter * M_PI;
-    //Right.spinFor(fwd, 5*angle*360/circumference, degrees, false);
-    //Left.spinFor(rev, 5*angle*360/circumference, degrees);
-// }
+
 
 
 
